@@ -7,7 +7,7 @@ docker-composer up
 
 
 # install docker  
-base centos.
+base on centos.  
 sudo yum install -y yum-utils \\  
   device-mapper-persistent-data \\  
   lvm2  
