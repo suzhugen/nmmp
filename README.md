@@ -8,11 +8,11 @@ docker-composer up
 
 # install docker  
 base centos.
-sudo yum install -y yum-utils \\
-  device-mapper-persistent-data \\
+sudo yum install -y yum-utils \\  
+  device-mapper-persistent-data \\  
   lvm2  
-sudo yum-config-manager \\
-    --add-repo \\
+sudo yum-config-manager \\  
+    --add-repo \\  
     https://download.docker.com/linux/centos/docker-ce.repo  
 sudo yum install docker-ce  
 sudo systemctl enable docker  
