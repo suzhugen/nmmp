@@ -1,6 +1,9 @@
 # nmmp
 nginx,mysql,mongo,php
 
+## env require
+docker-ce-17.09.1.ce
+docker-compose version 1.18.0
 
 # build and run
 cd .  

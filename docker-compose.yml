@@ -17,10 +17,10 @@ services:
     links:
       - php:php
     volumes:
-      # - /data/www/:/usr/share/nginx/html
-      # - /data/nginx/conf/conf.d/:/etc/nginx/conf.d/
-      - /Users/suzhugen/Documents/dev/www:/usr/share/nginx/html
-      - /Users/suzhugen/Documents/dev/git/nmmp/nmmp/nginx/:/etc/nginx/conf.d/
+      - /data/www/:/usr/share/nginx/html
+      - /data/nginx/conf/conf.d/:/etc/nginx/conf.d/
+      # - /Users/suzhugen/Documents/dev/www:/usr/share/nginx/html
+      # - /Users/suzhugen/Documents/dev/git/nmmp/nmmp/nginx/:/etc/nginx/conf.d/
 
   php:
     image: registry.cn-hangzhou.aliyuncs.com/gen/php:latest
@@ -29,8 +29,8 @@ services:
     container_name: cphp
     restart: always
     volumes:
-      # - /data/www/:/usr/share/nginx/html
-      - /Users/suzhugen/Documents/dev/www:/usr/share/nginx/html
+      - /data/www/:/usr/share/nginx/html
+      # - /Users/suzhugen/Documents/dev/www:/usr/share/nginx/html
     # links:
       # - web:web
     # networks:
