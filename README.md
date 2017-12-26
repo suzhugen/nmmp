@@ -2,9 +2,22 @@
 nginx,mysql,mongo,php
 
 
-# build
-docker-composer up
+# build and run
+cd .  
+docker-compose up -d  
 
+# build new or latest images
+docker-compose build --pull
+
+### compose  
+docker-compose restart #重启所有容器
+docker-compose restart App1  #重启App1
+docker-compose exec App1 bash
+
+# nginx  
+ -v /data/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+站点配置： -v /data/nginx/conf/conf.d/:/etc/nginx/conf.d/
+默认文件位置： /usr/share/nginx/html
 
 # install docker  
 base on centos.  

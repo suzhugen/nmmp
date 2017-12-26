@@ -1,0 +1,48 @@
+version: '3.3'
+services:
+  web:
+ #   image: dockercloud/hello-world
+    build: ./nginx/
+    image: cweb:1.0
+    container_name: cnginx
+    # depends_on:
+    #   - php
+    ports:
+      # - "80:80"
+      - "8066:80"
+    environment:
+      - NGINX_PORT=80
+    command: "nginx -g 'daemon off';"
+    restart: always
+    links:
+      - php:php
+    volumes:
+      # - /data/www/:/usr/share/nginx/html
+      # - /data/nginx/conf/conf.d/:/etc/nginx/conf.d/
+      - /Users/suzhugen/Documents/dev/www:/usr/share/nginx/html
+      - /Users/suzhugen/Documents/dev/git/nmmp/nmmp/nginx/:/etc/nginx/conf.d/
+
+  php:
+    image: registry.cn-hangzhou.aliyuncs.com/gen/php:latest
+    # build: ./php/
+    # image: "cphp:1.0"
+    container_name: cphp
+    restart: always
+    volumes:
+      # - /data/www/:/usr/share/nginx/html
+      - /Users/suzhugen/Documents/dev/www:/usr/share/nginx/html
+    # links:
+      # - web:web
+    # networks:
+    #   - "netName2"
+
+  #  mysql:
+
+  #  mongo:
+
+# networks:
+#   netName1:
+#     driver: bridge
+#   netName2:
+#     driver: bridge
+  

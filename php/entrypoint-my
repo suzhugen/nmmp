@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+# echo 'start ws'
+# nohup php /var/www/html/public/server.php start &
+# echo 'ws started ok'
+
+
+echo 'start php-fpm'
+php-fpm
+echo 'php-fpm started'
