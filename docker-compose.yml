@@ -1,10 +1,10 @@
 version: '3.3'
 services:
   web:
- #   image: dockercloud/hello-world
-    build: ./nginx/
-    image: cweb:1.0
-    container_name: cnginx
+   image: nginx:1.13.7
+    # build: ./nginx/
+    # image: cweb:1.0
+    container_name: nginx
     # depends_on:
     #   - php
     ports:
@@ -21,24 +21,36 @@ services:
       - /data/nginx/conf/conf.d/:/etc/nginx/conf.d/
       # - /Users/suzhugen/Documents/dev/www:/usr/share/nginx/html
       # - /Users/suzhugen/Documents/dev/git/nmmp/nmmp/nginx/:/etc/nginx/conf.d/
-
+    
   php:
-    image: registry.cn-hangzhou.aliyuncs.com/gen/php:latest
-    # build: ./php/
-    # image: "cphp:1.0"
-    container_name: cphp
+    image: oddoson/basephp:7.1
+    container_name: php
     restart: always
+    expose: 9000
     volumes:
       - /data/www/:/usr/share/nginx/html
       # - /Users/suzhugen/Documents/dev/www:/usr/share/nginx/html
-    # links:
-      # - web:web
+    links:
+      - mysql:mysql
+      - mongo:mongo
     # networks:
     #   - "netName2"
 
-  #  mysql:
+   mysql:
+    image: mysql:5.6
+    container_name: mongo
+    restart: always
+    expose: 3306
+    volumes:
+      - /data/mysql/:/var/lib/mysql
 
-  #  mongo:
+   mongo:
+    image: mongo:3.6
+    container_name: mongo
+    expose: 27017
+    restart: always
+    volumes:
+      - /data/mongo/:/data/db
 
 # networks:
 #   netName1:
