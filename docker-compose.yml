@@ -1,14 +1,11 @@
+# docker-composer 
+# run: docker-compose up -d
 version: '3.3'
 services:
   web:
    image: nginx:1.13.7
-    # build: ./nginx/
-    # image: cweb:1.0
     container_name: nginx
-    # depends_on:
-    #   - php
     ports:
-      # - "80:80"
       - "80:80"
     environment:
       - NGINX_PORT=80
@@ -29,20 +26,23 @@ services:
     expose: 9000
     volumes:
       - /data/www/:/usr/share/nginx/html
-      # - /Users/suzhugen/Documents/dev/www:/usr/share/nginx/html
     links:
       - mysql:mysql
       - mongo:mongo
-    # networks:
-    #   - "netName2"
 
    mysql:
     image: mysql:5.6
-    container_name: mongo
+    container_name: mysql
     restart: always
     expose: 3306
     volumes:
       - /data/mysql/:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ads #启动时创建的数据库
+     # MYSQL_ROOT_HOST: 0.0.0.0 #root账号可调用ip
+     # MYSQL_ROOT_PASSWORD: xxxx  #root密码
+      MYSQL_USER: poolx # 创建的账户默认外网可访问。。
+      MYSQL_PASSWORD: gool*Klml89
 
    mongo:
     image: mongo:3.6

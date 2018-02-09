@@ -1,0 +1,28 @@
+# run: docker-compose up -d
+version: '3.3'
+services:
+  node:
+    image: node:9
+    user: "node"
+    container_name: pay_node
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+    restart: always
+    links : 
+      - mongo
+    working_dir: /home/node/app
+    volumes:
+      - ./:/home/node/app
+    depends_on:
+      - mongo
+    command: "npm start"
+  mongo:
+    image: mongo:3.6
+    container_name: pay_mongo
+    expose: 
+      - 27017
+    restart: always
+    volumes:
+      - /data/mongo/:/data/db
