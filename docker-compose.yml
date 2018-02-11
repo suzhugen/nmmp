@@ -18,7 +18,24 @@ services:
       - /data/nginx/conf/conf.d/:/etc/nginx/conf.d/
       # - /Users/suzhugen/Documents/dev/www:/usr/share/nginx/html
       # - /Users/suzhugen/Documents/dev/git/nmmp/nmmp/nginx/:/etc/nginx/conf.d/
-    
+  node:
+    image: node:9
+    user: "node"
+    container_name: node
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+    restart: always
+    links : 
+      - mongo
+    working_dir: /home/node/app
+    volumes:
+      - ./:/home/node/app
+    depends_on:
+      - mongo
+    command: "npm start"
+
   php:
     image: oddoson/basephp:7.1
     container_name: php
