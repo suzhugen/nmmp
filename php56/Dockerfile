@@ -100,7 +100,7 @@ RUN groupadd www  && useradd -g www www \
 && rm -rf /home/*   \
 && yum clean all && rm -rf /var/cache/yum
 
-VOLUME [ '/usr/share/nginx/html/','/usr/local/php/etc/php-fpm.d/' ]
+VOLUME [ "/usr/share/nginx/html/","/usr/local/php/etc/php-fpm.d/" ]
 
 
 EXPOSE 9000
