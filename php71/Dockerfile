@@ -1,5 +1,6 @@
-# Use: docker build --rm -t  basephp7:latest .
+# Use: docker build --rm -t  basephp:7 .
 # PHP version 7.1
+# oddoson/basephp:7.1
 # nginx 文件路径 /usr/share/nginx/html/
 FROM oddoson/basephp:base
 MAINTAINER "odd"
