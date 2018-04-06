@@ -87,6 +87,8 @@ RUN groupadd www  && useradd -g www www \
 --enable-mysqlnd-compression-support \
 --with-pear \
 --enable-opcache \
+--enable-pcntl \
+--enable-posix \
 && make && make install \
 && ln -s -f /usr/local/php/bin/php /usr/bin \
 && ln -s /usr/local/php/sbin/php-fpm /usr/bin \
@@ -94,6 +96,7 @@ RUN groupadd www  && useradd -g www www \
 && ln -s -f /usr/local/php/bin/pecl /usr/bin \
 #删除不需要的配置 
 && rm -rf /etc/php.d/* \
+&& yum install -y php-process \
 # 不需要
 # && yum -y install php-mysqlnd php-mcrypt  php-gd php-ldap php-odbc \
 # && /usr/local/php/bin/pecl install mongodb && cp /usr/local/php/lib/php/extensions/no-debug-non-zts-20160303/mongodb.so /usr/lib64/php/modules/ && echo 'extension=/usr/local/php/lib/php/extensions/no-debug-non-zts-20160303/mongodb.so'> /etc/php.d/mongo7.ini \

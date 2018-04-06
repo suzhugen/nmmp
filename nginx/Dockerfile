@@ -15,7 +15,8 @@ RUN mkdir -p /data/nginx/logs
 # VOLUME [ "/etc/nginx/conf.d/","/var/log/nginx/" ]
 
 EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD "echo aa"
+CMD "echo bb"
+# CMD ["nginx", "-g", "daemon off;"]
 
   

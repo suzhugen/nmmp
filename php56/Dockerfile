@@ -1,7 +1,11 @@
-# Use: docker build --rm -t  basephp56:latest .
+# Use: docker build --rm -t basephp:5.6 .
 # PHP version 5.6
 # nginx 文件路径 /usr/share/nginx/html/
 # FROM oddoson/basephp:base
+#
+#打包提交
+#docker tag basephp:5.6 oddoson/basephp:5.6
+#docker push basephp:5.6
 FROM oddoson/basephp:base
 MAINTAINER "odd"
 LABEL author="odd" \
@@ -81,6 +85,8 @@ RUN groupadd www  && useradd -g www www \
 --enable-mysqlnd-compression-support \
 --with-pear \
 --enable-opcache \
+--enable-pcntl \
+--enable-posix \
 && make && make install \
 && ln -s -f /usr/local/php/bin/php /usr/bin \
 && ln -s -f /usr/local/php/sbin/php-fpm /usr/bin \
