@@ -41,4 +41,13 @@ curl -L https://github.com/docker/compose/releases/download/1.18.0/docker-compos
 sudo chmod +x /usr/local/bin/docker-compose   
 docker-compose --version  
 
+## docker 时区设置
+(方法一) 共享主机的localtime  
+创建容器的时候指定启动参数，挂载localtime文件到容器内  ，保证两者所采用的时区是一致的。
+docker run --name <name> -v /etc/localtime:/etc/localtime:ro ....
+(方法二) 复制主机的localtime  
+docker cp /etc/localtime:【容器ID或者NAME】/etc/localtime
+(方法三) 新建dockerfile，重新编译
+RUN cp /usr/share/zoneinfo/PRC /etc/localtime
+
 

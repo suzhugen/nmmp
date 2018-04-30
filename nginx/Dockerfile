@@ -8,15 +8,13 @@ LABEL author="odd" \
 # -v /data/nginx/conf/conf.d/:/etc/nginx/conf.d/
 # default www dir : /usr/share/nginx/html
 
-RUN mkdir -p /data/nginx/conf
-RUN mkdir -p /data/nginx/logs
+RUN mkdir -p /data/nginx/conf &&  /data/nginx/logs
 
+ADD ./nginx.conf /etc/nginx/conf.d/nginx.conf
 
 # VOLUME [ "/etc/nginx/conf.d/","/var/log/nginx/" ]
 
 EXPOSE 80
-CMD "echo aa"
-CMD "echo bb"
-# CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
 
   

@@ -106,6 +106,8 @@ RUN groupadd www  && useradd -g www www \
 && rm -rf /home/*   \
 && yum clean all && rm -rf /var/cache/yum
 
+ADD ./php.ini /etc/php.ini
+
 VOLUME [ "/usr/share/nginx/html/","/usr/local/php/etc/php-fpm.d/" ]
 
 
