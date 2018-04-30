@@ -1,4 +1,4 @@
-# docker build -t mynginx .
+# docker build -t mynginx . 
 FROM nginx:1.13.7
 MAINTAINER "odd"
 LABEL author="odd" \

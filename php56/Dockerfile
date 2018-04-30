@@ -2,7 +2,7 @@
 # PHP version 5.6
 # nginx 文件路径 /usr/share/nginx/html/
 # FROM oddoson/basephp:base
-#
+# 
 #打包提交
 #docker tag basephp:5.6 oddoson/basephp:5.6
 #docker push basephp:5.6

@@ -2,6 +2,7 @@
 # PHP version 7.1
 # oddoson/basephp:base
 # nginx 文件路径 /usr/share/nginx/html/
+#
 FROM centos:7
 MAINTAINER "odd"
 LABEL author="odd" \
