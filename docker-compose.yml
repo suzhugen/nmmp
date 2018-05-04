@@ -51,13 +51,14 @@ services:
     image: mysql:5.6
     container_name: mysql
     restart: always
-    expose: 3306
+    expose: 
+      - 3306
     volumes:
       - /data/mysql/:/var/lib/mysql
     environment:
       MYSQL_DATABASE: ads #启动时创建的数据库
-     # MYSQL_ROOT_HOST: 0.0.0.0 #root账号可调用ip
-     # MYSQL_ROOT_PASSWORD: xxxx  #root密码
+      MYSQL_ROOT_HOST: 0.0.0.0 #root账号可调用ip
+      MYSQL_ROOT_PASSWORD: xxxx  #root密码
       MYSQL_USER: poolx # 创建的账户默认外网可访问。。
       MYSQL_PASSWORD: gool*Klml89
 

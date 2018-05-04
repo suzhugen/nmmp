@@ -1,0 +1,28 @@
+# docker-compose
+# run: docker-compose up -d
+version: '3.3'
+services:
+  web:
+    image: nginx:1.13.7
+    container_name: nginx
+    ports:
+      - "8043:80"
+    environment:
+      - NGINX_PORT=80
+    command: "nginx -g 'daemon off';"
+    restart: always
+    links:
+      - php:php
+    depends_on:
+      - php
+    volumes:
+      - ../:/usr/share/nginx/html
+      - ./:/etc/nginx/conf.d/
+  php:
+    image: oddoson/basephp:5.6
+    container_name: php
+    restart: always
+    expose:
+      - 9000
+    volumes:
+      - ../:/usr/share/nginx/html
