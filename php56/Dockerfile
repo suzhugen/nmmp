@@ -11,10 +11,7 @@
 # PHP version 5.6
 # nginx 文件路径 /usr/share/nginx/html/
 # FROM oddoson/basephp:base
-# 
-#打包提交
-#docker tag basephp:5.6 oddoson/basephp:5.6
-#docker push basephp:5.6
+
 FROM oddoson/basephp:base
 MAINTAINER "odd"
 LABEL author="odd" \
@@ -120,7 +117,7 @@ RUN cd /home && wget http://cn2.php.net/distributions/php-5.6.2.tar.gz \
 && pecl install redis-2.2.8 \
 #安装event 扩展
 && echo no | pecl install  event \
-#swoole扩展
+#swoole扩展 
 # && yes | pecl install swoole-2.0.10  \
 #安装composer
 && wget https://dl.laravel-china.org/composer.phar -O /usr/local/bin/composer && chmod a+x /usr/local/bin/composer \
@@ -130,7 +127,6 @@ RUN cd /home && wget http://cn2.php.net/distributions/php-5.6.2.tar.gz \
 && echo 'extension=mongo.so' > /etc/php.d/mongo.ini \
 && echo 'extension=event.so' > /etc/php.d/30-event.ini \
 # && echo 'extension=swoole.so' > /etc/php.d/swoole.ini \
-
 ############### 安装php扩展end ###############
 
 && mkdir /data && chmod -R 777 /data \
