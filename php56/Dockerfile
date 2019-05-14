@@ -1,3 +1,11 @@
+# php5.6镜像
+# 包含扩展：
+# redis
+# mongo
+# event
+# swoole 2.0.10
+# composer
+#
 # Use: docker build --rm -t basephp:5.6 .
 # PHP version 5.6
 # nginx 文件路径 /usr/share/nginx/html/
@@ -10,13 +18,9 @@ FROM oddoson/basephp:base
 MAINTAINER "odd"
 LABEL author="odd" \
       description="nginx" 
- 
-RUN groupadd www  && useradd -g www www \
-&&  rpm --rebuilddb \
-# && rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7 && yum -y install yum-utils && yum -y update && yum -y install wget  epel-release \
-# && yum -y install gcc openssl gd openssl-devel  php-devel bzip2 bzip2-devel  autoconf \
-#  freetype freetype-devel libxslt-devel readline-devel gmp-devel  jpegsrc libpng libpng-devel libwebp libwebp-devel libpng-devel libjpeg libjpeg-devel libxml2 libxml2-devel zlib curl curl-devel libevent-devel libmcrypt libmcrypt-devel \
+
 # BUILD PHP
+RUN rpm --rebuilddb \
 && cd /home && wget http://cn2.php.net/distributions/php-5.6.2.tar.gz \
 && tar -xf php-5.6.2.tar.gz \
 && cd php-5.6.2 \
@@ -88,38 +92,61 @@ RUN groupadd www  && useradd -g www www \
 --enable-pcntl \
 --enable-posix \
 && make && make install \
-&& ln -s -f /usr/local/php/bin/php /usr/bin \
-&& ln -s -f /usr/local/php/sbin/php-fpm /usr/bin \
+&& \cp -f /usr/local/php/bin/pear /usr/bin \
+&& \cp -f /usr/local/php/bin/peardev /usr/bin \
+&& \cp -f /usr/local/php/bin/pecl /usr/bin \
+&& \cp -f /usr/local/php/bin/phar /usr/bin \
+&& \cp -f /usr/local/php/bin/phar.phar /usr/bin \
+&& \cp -f /usr/local/php/bin/php /usr/bin \
+&& \cp -f /usr/local/php/bin/php-cgi /usr/bin \
+&& \cp -f /usr/local/php/bin/php-config /usr/bin \
+&& \cp -f /usr/local/php/bin/phpize /usr/bin \
+&& \cp -f /usr/local/php/sbin/php-fpm /usr/bin \
 && ln -s -f /usr/local/php/ /usr/include/php \
-&& ln -s -f /usr/local/php/bin/pecl /usr/bin \
-&& wget https://dl.laravel-china.org/composer.phar -O /usr/local/bin/composer && chmod a+x /usr/local/bin/composer \
-&& rm -r /etc/php.d/* \
-# && yum -y install php-mysqlnd php-mcrypt  php-gd php-ldap php-odbc \
-#&& pecl install mongo && echo 'extension=/usr/local/php/lib/php/extensions/no-debug-non-zts-20131226/mongo.so' > mongo.ini \
-&& pecl install mongo \
-&& echo no | pecl install  event  \
 && chmod +x /etc/rc.d/rc.local && echo "/usr/local/php/sbin/php-fpm start" >>/etc/rc.d/rc.local \
 &&  /home/php-5.6.2/build/shtool install -c ext/phar/phar.phar /usr/local/php/bin \
 && cp /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf \ 
 && sed -i 's/;pid = run\/php-fpm.pid/pid = run\/php-fpm.pid/g' /usr/local/php/etc/php-fpm.conf && sed -i 's/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/g' /usr/local/php/etc/php-fpm.conf \
-&& rm -rf /etc/php.d/*  && echo 'extension=mongo.so' > /etc/php.d/mongo.ini && echo 'extension=/usr/local/php/lib/php/extensions/no-debug-non-zts-20131226/event.so' > /etc/php.d/30-event.ini \
+
+
+# && rm -r /etc/php.d/* \
+
+############### 安装php扩展start ###############
+&& pecl config-set php_bin /usr/local/php/bin/php && pecl config-set php_dir /usr/local/php && pecl config-set ext_dir /usr/local/php/lib/php/extensions/no-debug-non-zts-20131226 \ 
+#安装mongodb扩展
+&& yum install -y php-pecl-mongodb   \
+#安装redis扩展
+&& yum install -y php-pecl-redis \
+#安装event 扩展
+&& echo no | pecl install  event \
+#swoole扩展
+&& pecl install swoole-2.0.10  \
+#安装composer
+&& wget https://dl.laravel-china.org/composer.phar -O /usr/local/bin/composer && chmod a+x /usr/local/bin/composer \
+
+# 复制所有so
+&& \cp -f /usr/local/php/lib/php/extensions/no-debug-non-zts-20131226/* /usr/lib64/php/modules/ \
+
+# && rm -rf /etc/php.d/*  \
+&& echo 'extension=redis.so' > /etc/php.d/redis.ini \
+&& echo 'extension=mongo.so' > /etc/php.d/mongo.ini \
+&& echo 'extension=event.so' > /etc/php.d/30-event.ini \
+&& echo 'extension=swoole.so' > /etc/php.d/swoole.ini \
+
+############### 安装php扩展end ###############
+&& mkdir /data && chmod -R 777 /data \
 && rm -rf /home/*   \
 && yum clean all && rm -rf /var/cache/yum
 
 ADD ./php.ini /etc/php.ini
-
 VOLUME [ "/usr/share/nginx/html/","/usr/local/php/etc/php-fpm.d/" ]
-
-
 EXPOSE 9000
-
 CMD ["php-fpm","-c /etc/php.ini","-F"]
 
-  
 
 
 
-# install info
+# 查看已安装扩展： # php --info 或者 php-fpm -m  或者  /usr/local/php/bin/php -m
 # /etc/php.ini 
 # yum install 安装的php扩展系统安装位置： /usr/lib64/php/modules/
 # yum install 安装拓展配置文件位置：/etc/php.d

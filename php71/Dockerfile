@@ -1,21 +1,30 @@
-# Use: docker build --rm -t  basephp:7 .
-# PHP version 7.1
-# oddoson/basephp:7.1
+# php7.2.17镜像
+# 包含扩展：
+# redis
+# mongo
+# event
+# swoole 4.2.9
+# composer
+#
+# PHP version 7.2.17
+# oddoson/basephp:7.2
 # nginx 文件路径 /usr/share/nginx/html/
+
+# Use: docker build --rm -t  basephp:7.2 .
+# 打包提交
+# docker tag basephp:7.2 oddoson/basephp:7.2
+# docker push basephp:7.2
+
 FROM oddoson/basephp:base
 MAINTAINER "odd"
 LABEL author="odd" \
       description="nginx" 
  
-RUN groupadd www  && useradd -g www www \
-&&  rpm --rebuilddb \
-# && rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7 && yum -y install yum-utils && yum -y update && yum -y install wget  epel-release \
-# && yum -y install gcc openssl gd openssl-devel  php-devel bzip2 bzip2-devel  autoconf \
-#  freetype freetype-devel libxslt-devel readline-devel gmp-devel  jpegsrc libpng libpng-devel libwebp libwebp-devel libpng-devel libjpeg libjpeg-devel libxml2 libxml2-devel zlib curl curl-devel libevent-devel libmcrypt libmcrypt-devel \
+RUN rpm --rebuilddb \
 # BUILD PHP
-&& cd /home && wget http://cn2.php.net/distributions/php-7.1.1.tar.gz \
-&& tar -xf php-7.1.1.tar.gz \
-&& cd php-7.1.1 \
+&& cd /home && wget http://cn2.php.net/distributions/php-7.2.17.tar.gz \
+&& tar -xf php-7.2.17.tar.gz \
+&& cd php-7.2.17 \
 && ./configure \
 #指定 php 安装目录
 --prefix=/usr/local/php \
@@ -91,28 +100,57 @@ RUN groupadd www  && useradd -g www www \
 --enable-pcntl \
 --enable-posix \
 && make && make install \
-&& ln -s -f /usr/local/php/bin/php /usr/bin \
-&& ln -s /usr/local/php/sbin/php-fpm /usr/bin \
-&& ln -s /usr/local/php/ /usr/include/php \
-&& ln -s -f /usr/local/php/bin/pecl /usr/bin \
-#删除不需要的配置 
-&& rm -rf /etc/php.d/* \
-&& yum install -y php-process \
-# 不需要
-# && yum -y install php-mysqlnd php-mcrypt  php-gd php-ldap php-odbc \
-# && /usr/local/php/bin/pecl install mongodb && cp /usr/local/php/lib/php/extensions/no-debug-non-zts-20160303/mongodb.so /usr/lib64/php/modules/ && echo 'extension=/usr/local/php/lib/php/extensions/no-debug-non-zts-20160303/mongodb.so'> /etc/php.d/mongo7.ini \
-&& yum install -y php-pecl-mongodb \
-&& echo no | pecl install  event && cp /usr/local/php/lib/php/extensions/no-debug-non-zts-20160303/event.so /usr/lib64/php/modules/ && echo 'extension=/usr/local/php/lib/php/extensions/no-debug-non-zts-20160303/event.so' > /etc/php.d/30-event.ini \
+# && \cp -f /usr/local/php/bin/pear /usr/bin \
+# && \cp -f /usr/local/php/bin/peardev /usr/bin \
+# && \cp -f /usr/local/php/bin/pecl /usr/bin \
+# && \cp -f /usr/local/php/bin/phar /usr/bin \
+# && \cp -f /usr/local/php/bin/phar.phar /usr/bin \
+# && \cp -f /usr/local/php/bin/php /usr/bin \
+# && \cp -f /usr/local/php/bin/php-cgi /usr/bin \
+# && \cp -f /usr/local/php/bin/php-config /usr/bin \
+# && \cp -f /usr/local/php/bin/phpize /usr/bin \
+# && \cp -f /usr/local/php/sbin/php-fpm /usr/bin \
+# && ln -s -f /usr/local/php/ /usr/include/php \
 # Php-fpm 开机启动
 && chmod +x /etc/rc.d/rc.local && echo "/usr/local/php/sbin/php-fpm start" >>/etc/rc.d/rc.local \
 # 添加PHP环境变量
 && echo -e '\nexport PATH=/usr/local/php/bin:/usr/local/php/sbin:$PATH\n' >> /etc/profile \
 && source /etc/profile \
-&&  /home/php-7.1.1/build/shtool install -c ext/phar/phar.phar /usr/local/php/bin \
+&&  /home/php-7.2.17/build/shtool install -c ext/phar/phar.phar /usr/local/php/bin \
 && cp /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf \ 
 && cp /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf \
 && sed -i 's/;pid = run\/php-fpm.pid/pid = run\/php-fpm.pid/g' /usr/local/php/etc/php-fpm.conf && sed -i 's/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/g' /usr/local/php/etc/php-fpm.d/www.conf \
-&& wget https://dl.laravel-china.org/composer.phar -O /usr/local/bin/composer && chmod a+x /usr/local/bin/composer \
+&& yum install -y php-process \
+# 不需要
+# && yum -y install php-mysqlnd php-mcrypt  php-gd php-ldap php-odbc \
+# && /usr/local/php/bin/pecl install mongodb && cp /usr/local/php/lib/php/extensions/no-debug-non-zts-20170718/mongodb.so /usr/lib64/php/modules/ && echo 'extension=/usr/local/php/lib/php/extensions/no-debug-non-zts-20170718/mongodb.so'> /etc/php.d/mongo7.ini \
+
+############### 安装php扩展start ###############
+&& /usr/local/php/bin/pecl channel-update pecl.php.net  && /usr/local/php/bin/pecl config-set php_bin /usr/local/php/bin/php && /usr/local/php/bin/pecl config-set php_dir /usr/local/php && /usr/local/php/bin/pecl config-set ext_dir /usr/local/php/lib/php/extensions/no-debug-non-zts-20170718 \ 
+#安装mongodb扩展
+&& yum install -y php-pecl-mongodb  \
+#安装redis扩展
+&& yum install -y php-pecl-redis \
+#安装event 扩展
+&& echo no | /usr/local/php/bin/pecl install  event \
+# swoole扩展
+&& /usr/local/php/bin/pecl install swoole-4.2.9  \
+
+#安装composer
+# && wget https://dl.laravel-china.org/composer.phar -O /usr/local/bin/composer && chmod a+x /usr/local/bin/composer \
+
+# 复制所有so
+&& \cp -f /usr/local/php/lib/php/extensions/no-debug-non-zts-20170718/* /usr/lib64/php/modules/ \
+
+
+&& echo 'extension=redis.so' > /etc/php.d/redis.ini \
+&& echo 'extension=mongo.so' > /etc/php.d/mongo.ini \
+&& echo 'extension=event.so' > /etc/php.d/30-event.ini \
+&& echo 'extension=swoole.so' > /etc/php.d/swoole.ini \
+############### 安装php扩展end ###############
+
+
+############### 配置 ###############
 # data folder
 && mkdir /data && chmod -R 777 /data \
 && rm -rf /home/* \
@@ -129,12 +167,12 @@ CMD ["php-fpm","-c /etc/php.ini","-F"]
 
 
 
-# install info
+# 查看已安装扩展： # php --info 或者 php-fpm -m  或者  /usr/local/php/bin/php -m
 # /etc/php.ini 
 # yum install 安装的php扩展系统安装位置： /usr/lib64/php/modules/
 # yum install 安装拓展配置文件位置：/etc/php.d
 # php-fpm 配置文件：/usr/local/php/etc/php-fpm.conf ， /usr/local/php/etc/php-fpm.d/*.ini
-# Installing shared extensions:     /usr/local/php/lib/php/extensions/no-debug-non-zts-20160303/
+# Installing shared extensions:     /usr/local/php/lib/php/extensions/no-debug-non-zts-20170718/
 # Installing PHP CLI binary:        /usr/local/php/bin/
 # Installing PHP CLI man page:      /usr/local/php/php/man/man1/
 # Installing PHP FPM binary:        /usr/local/php/sbin/
@@ -161,6 +199,6 @@ CMD ["php-fpm","-c /etc/php.ini","-F"]
 # [PEAR] PEAR           - installed: 1.10.1
 # Wrote PEAR system config file at: /usr/local/php/etc/pear.conf
 # You may want to add: /usr/local/php/lib/php to your php.ini include_path
-# /home/php-7.1.1/build/shtool install -c ext/phar/phar.phar /usr/local/php/bin
+# /home/php-7.2.17/build/shtool install -c ext/phar/phar.phar /usr/local/php/bin
 # ln -s -f phar.phar /usr/local/php/bin/phar
 # Installing PDO headers:           /usr/local/php/include/php/ext/pdo/
