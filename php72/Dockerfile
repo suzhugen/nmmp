@@ -134,9 +134,12 @@ RUN cd /home && wget http://cn2.php.net/distributions/php-7.2.18.tar.gz \
 #安装redis扩展
 && pecl install redis-4.2.0 \
 #安装event 扩展
-# && echo no | pecl install  event \
-# swoole扩展
-&& yes | pecl install swoole-4.2.9   \
+&& echo no | pecl install  event \
+
+# swoole扩展,要手动安装，pecl会自动开启日志。。
+# &&  wget https://pecl.php.net/get/swoole-4.2.9.tgz && tar zxvf swoole-4.2.9.tgz && cd swoole-4.2.9 && phpize \
+# && yum install -y nghttp2 && ./configure --enable-coroutine --enable-openssl   --enable-sockets --enable-mysqlnd  \
+# && make clean && make &&  make install \
 
 #安装composer
 && wget https://dl.laravel-china.org/composer.phar -O /usr/local/bin/composer && chmod a+x /usr/local/bin/composer \

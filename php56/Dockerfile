@@ -117,8 +117,11 @@ RUN cd /home && wget http://cn2.php.net/distributions/php-5.6.2.tar.gz \
 && pecl install redis-2.2.8 \
 #安装event 扩展
 && echo no | pecl install  event \
-#swoole扩展 
-# && yes | pecl install swoole-2.0.10  \
+# swoole扩展,要手动安装，pecl会自动开启日志。。
+# &&  wget https://pecl.php.net/get/swoole-2.0.10.tgz && tar zxvf swoole-2.0.10.tgz && cd swoole-2.0.10 && phpize \
+# && yum install -y nghttp2 && ./configure --enable-coroutine --enable-openssl   --enable-sockets --enable-mysqlnd  \
+# && make clean && make &&  make install \
+
 #安装composer
 && wget https://dl.laravel-china.org/composer.phar -O /usr/local/bin/composer && chmod a+x /usr/local/bin/composer \
 
