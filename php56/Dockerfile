@@ -89,7 +89,7 @@ RUN cd /home && wget http://cn2.php.net/distributions/php-5.6.2.tar.gz \
 --enable-pcntl \
 --enable-posix \
 #编译swoole
---enable-swoole \
+# --enable-swoole \
 && make && make install \
 && \cp -f /usr/local/php/bin/pear /usr/bin \
 && \cp -f /usr/local/php/bin/peardev /usr/bin \
@@ -116,20 +116,20 @@ RUN cd /home && wget http://cn2.php.net/distributions/php-5.6.2.tar.gz \
 #安装redis扩展
 && pecl install redis-2.2.8 \
 #安装event 扩展
-&& echo no | pecl install  event \
+&& echo no | pecl install  event \  
 # swoole扩展,要手动安装，pecl会自动开启日志。。
-# &&  wget https://pecl.php.net/get/swoole-2.0.10.tgz && tar zxvf swoole-2.0.10.tgz && cd swoole-2.0.10 && phpize \
-# && yum install -y nghttp2 && ./configure --enable-coroutine --enable-openssl   --enable-sockets --enable-mysqlnd  \
-# && make clean && make &&  make install \
+&&  wget https://pecl.php.net/get/swoole-2.0.10.tgz && tar zxvf swoole-2.0.10.tgz && cd swoole-2.0.10 && phpize \
+&& yum install -y nghttp2 && ./configure --enable-coroutine --enable-openssl   --enable-sockets --enable-mysqlnd  \
+&& make clean && make &&  make install \
 
 #安装composer
 && wget https://dl.laravel-china.org/composer.phar -O /usr/local/bin/composer && chmod a+x /usr/local/bin/composer \
 
 && mkdir -p /etc/php.d/ \
 && echo 'extension=redis.so' > /etc/php.d/redis.ini \
-&& echo 'extension=mongo.so' > /etc/php.d/mongo.ini \
+&& echo 'extension=mongodb.so' > /etc/php.d/mongo.ini \
 && echo 'extension=event.so' > /etc/php.d/30-event.ini \
-# && echo 'extension=swoole.so' > /etc/php.d/swoole.ini \
+&& echo 'extension=swoole.so' > /etc/php.d/swoole.ini \
 ############### 安装php扩展end ###############
 
 && mkdir /data && chmod -R 777 /data \

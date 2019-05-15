@@ -105,7 +105,7 @@ RUN cd /home && wget http://cn2.php.net/distributions/php-7.2.18.tar.gz \
 --enable-opcache \
 --enable-pcntl \
 --enable-posix \
---enable-swoole \
+# --enable-swoole \
 && make && make install \
 && \cp -f /usr/local/php/bin/pear /usr/bin \
 && \cp -f /usr/local/php/bin/peardev /usr/bin \
@@ -125,7 +125,7 @@ RUN cd /home && wget http://cn2.php.net/distributions/php-7.2.18.tar.gz \
 && source /etc/profile \
 && /home/php-7.2.18/build/shtool install -c ext/phar/phar.phar /usr/local/php/bin \
 && cp /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf \ 
-&& sed -i 's/;pid = run\/php-fpm.pid/pid = run\/php-fpm.pid/g' /usr/local/php/etc/php-fpm.conf && sed -i 's/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/g' /usr/local/php/etc/php-fpm.d/www.conf \
+&& sed -i 's/;pid = run\/php-fpm.pid/pid = run\/php-fpm.pid/g' /usr/local/php/etc/php-fpm.conf && sed -i 's/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/g' /usr/local/php/etc/php-fpm.conf \
 
 ############### 安装php扩展start ###############
 && /usr/local/php/bin/pecl channel-update pecl.php.net  && /usr/local/php/bin/pecl config-set php_bin /usr/local/php/bin/php && /usr/local/php/bin/pecl config-set php_dir /usr/local/php && /usr/local/php/bin/pecl config-set ext_dir /usr/local/php/lib/php/extensions/no-debug-non-zts-20170718 \ 
@@ -137,9 +137,9 @@ RUN cd /home && wget http://cn2.php.net/distributions/php-7.2.18.tar.gz \
 && echo no | pecl install  event \
 
 # swoole扩展,要手动安装，pecl会自动开启日志。。
-# &&  wget https://pecl.php.net/get/swoole-4.2.9.tgz && tar zxvf swoole-4.2.9.tgz && cd swoole-4.2.9 && phpize \
-# && yum install -y nghttp2 && ./configure --enable-coroutine --enable-openssl   --enable-sockets --enable-mysqlnd  \
-# && make clean && make &&  make install \
+&&  wget https://pecl.php.net/get/swoole-4.2.9.tgz && tar zxvf swoole-4.2.9.tgz && cd swoole-4.2.9 && phpize \
+&& yum install -y nghttp2 && ./configure --enable-coroutine --enable-openssl   --enable-sockets --enable-mysqlnd  \
+&& make clean && make &&  make install \
 
 #安装composer
 && wget https://dl.laravel-china.org/composer.phar -O /usr/local/bin/composer && chmod a+x /usr/local/bin/composer \
@@ -148,7 +148,7 @@ RUN cd /home && wget http://cn2.php.net/distributions/php-7.2.18.tar.gz \
 && echo 'extension=redis.so' > /etc/php.d/redis.ini \
 && echo 'extension=mongodb.so' > /etc/php.d/mongo.ini \
 && echo 'extension=event.so' > /etc/php.d/30-event.ini \
-# && echo 'extension=swoole.so' > /etc/php.d/swoole.ini \
+&& echo 'extension=swoole.so' > /etc/php.d/swoole.ini \
 ############### 安装php扩展end ###############
 
 
