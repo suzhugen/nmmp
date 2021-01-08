@@ -163,5 +163,6 @@ RUN cd /home && wget http://cn2.php.net/distributions/php-7.2.18.tar.gz \
 ADD ./www.fpm.conf /usr/local/php/etc/php-fpm.d/www.conf
 ADD ./php.ini /etc/php.ini
 VOLUME [ "/usr/share/nginx/html/","/usr/local/php/etc/php-fpm.d/" ]
+WORKDIR /usr/share/nginx/html/
 EXPOSE 9000
 CMD ["php-fpm","-c /etc/php.ini","-F"]
