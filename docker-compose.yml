@@ -16,8 +16,6 @@ services:
     volumes:
       - /data/www/:/usr/share/nginx/html
       - /data/nginx/conf/conf.d/:/etc/nginx/conf.d/
-      # - /Users/suzhugen/Documents/dev/www:/usr/share/nginx/html
-      # - /Users/suzhugen/Documents/dev/git/nmmp/nmmp/nginx/:/etc/nginx/conf.d/
   node:
     image: node:9
     user: "node"
