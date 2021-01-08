@@ -123,7 +123,7 @@ RUN cd /home && wget http://cn2.php.net/distributions/php-5.6.2.tar.gz \
       && make clean && make &&  make install \
 
       #安装composer
-      && wget https://dl.laravel-china.org/composer.phar -O /usr/local/bin/composer && chmod a+x /usr/local/bin/composer \
+      && wget https://getcomposer.org/composer-stable.phar -O /usr/local/bin/composer && chmod a+x /usr/local/bin/composer \
 
       && mkdir -p /etc/php.d/ \
       && echo 'extension=redis.so' > /etc/php.d/redis.ini \
