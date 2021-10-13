@@ -1,6 +1,4 @@
-ARG BUILD_VERSION
-FROM php:7.4-fpm-alpine
-# FROM php:$BUILD_VERSION
+FROM php:5.6.40-fpm-alpine
 # ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 ADD ./install-php-extensions /usr/local/bin/
 RUN sed -i 's/https/http/' /etc/apk/repositories && apk add curl && \
@@ -17,13 +15,12 @@ RUN sed -i 's/https/http/' /etc/apk/repositories && apk add curl && \
     install-php-extensions intl && \
     install-php-extensions bcmath && \
     install-php-extensions exif && \
-    install-php-extensions ffi && \
     install-php-extensions gettext && \
     install-php-extensions imagick && \
     install-php-extensions ldap && \
     install-php-extensions opcache && \
-    install-php-extensions event  && \
-    install-php-extensions pcntl
+    install-php-extensions event && \
+    install-php-extensions pcntl 
 
 ADD ./php.ini "$PHP_INI_DIR/php.ini"
 ADD ./xxx.www.conf "/usr/local/etc/php-fpm.d/xxx.www.conf"
